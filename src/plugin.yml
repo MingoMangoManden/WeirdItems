@@ -1,0 +1,8 @@
+name: WeirdItems
+author: Mingo
+version: 1.0.0
+main: Mingo.WeirdItems.Main
+api-version: 1.17
+
+commands:
+  weirditems:

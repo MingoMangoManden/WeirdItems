@@ -1,0 +1,10 @@
+- Make shift + right click to open guide and rules. ✔
+- Particles on use
+- Event priority ❌
+- Alternative getChanges solution:
+    loop through pages, page != page; check page for names and death causes (.split(“ “));
+- Make more death causes.
+- Max uses
+- Config (particles, custom death messages, max-uses)
+- Texture pack (the note, maybe something else too)
+
