@@ -1,9 +1,8 @@
 package Mingo.WeirdItems.Items;
 
-import Mingo.WeirdItems.Item;
-import Mingo.WeirdItems.Main;
-import Mingo.WeirdItems.RarityType;
-import org.bukkit.Bukkit;
+import Mingo.WeirdItems.*;
+import Mingo.WeirdItems.Helpers.Category.Category;
+import Mingo.WeirdItems.Helpers.Other.RarityType;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -17,15 +16,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class HoneyPot implements Listener {
+public class HoneyPot extends WeirdItem implements Listener {
 
     ItemStack item;
+    Item item_;
+
     Main plugin;
 
     public HoneyPot(Main plugin) {
@@ -36,12 +36,13 @@ public class HoneyPot implements Listener {
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
         enchants.put(Enchantment.LURE, 1);
 
-        Item pot = new Item("Winnie's Pot o' Honeh", Material.HONEY_BOTTLE, RarityType.RARE, lore, enchants);
+        Item pot = new Item("Winnie's Pot o' Honeh", Material.HONEY_BOTTLE, RarityType.RARE, lore, enchants, new Category[]{Category.MAGICAL, Category.TOOL});
         ItemMeta meta = pot.getItem().getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
         pot.getItem().setItemMeta(meta);
 
         this.item = pot.getItem();
+        this.item_ = pot;
         this.plugin = plugin;
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -64,5 +65,5 @@ public class HoneyPot implements Listener {
         }
     }
 
-    public ItemStack getItem() { return this.item; }
+    public Item getItem() { return this.item_; }
 }

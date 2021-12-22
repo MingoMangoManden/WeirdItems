@@ -1,11 +1,17 @@
 package Mingo.WeirdItems;
 
+import Mingo.WeirdItems.Commands.Commands;
+import Mingo.WeirdItems.Helpers.Category.CategoryManager;
+import Mingo.WeirdItems.Helpers.Other.Vault;
 import Mingo.WeirdItems.Items.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main extends JavaPlugin {
 
-    public Vault vault;
+    public static Vault vault;
 
     @Override
     public void onEnable() {
@@ -15,18 +21,27 @@ public class Main extends JavaPlugin {
     }
 
     public void addItems() {
-        this.vault.addItem(new GrapplingHook(this).getItem());
-        this.vault.addItem(new PoopSword(this).getItem());
-        this.vault.addItem(new Hammer(this).getItem());
-        this.vault.addItem(new HoneyPot(this).getItem());
-        this.vault.addItem(new DeathNote(this).getItem());
-        this.vault.addItem(new Cape(this).getItem());
-        this.vault.addItem(new EnderButt(this).getItem());
-        this.vault.addItem(new NinjaCap(this).getItem());
-        this.vault.addItem(new Sandals(this).getItem());
-        this.vault.addItem(new Shroom(this).getItem());
-        this.vault.addItem(new Rock(this).getItem());
-        this.vault.addItem(new CandyBag(this).getItem());
-        //this.vault.addItem(new GrappleGun(this).getItem());
+        List<Item> items = new ArrayList<>();
+
+        items.add(new GrapplingHook(this).getItem());
+        items.add(new GrappleGun(this).getItem());
+        items.add(new PoopSword(this).getItem());
+        items.add(new Hammer(this).getItem());
+        items.add(new HoneyPot(this).getItem());
+        items.add(new DeathNote(this).getItem());
+        items.add(new Cape(this).getItem());
+        items.add(new EnderButt(this).getItem());
+        items.add(new NinjaCap(this).getItem());
+        items.add(new NinjaCap(this).getItem());
+        items.add(new Sandals(this).getItem());
+        items.add(new Shroom(this).getItem());
+        items.add(new Rock(this).getItem());
+        items.add(new CandyBag(this).getItem());
+
+        for (Item item : items) {
+            this.vault.addItem(item);
+        }
+
+        CategoryManager.items = items;
     }
 }

@@ -1,5 +1,8 @@
 package Mingo.WeirdItems;
 
+import Mingo.WeirdItems.Helpers.Category.Category;
+import Mingo.WeirdItems.Helpers.Other.Helper;
+import Mingo.WeirdItems.Helpers.Other.RarityType;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -19,16 +22,16 @@ public class Item {
     RarityType rarity;
     List<String> lore;
 
-    HashMap<Enchantment, Integer> enchants_;
-    List<Enchantment> enchants;
-    List<Integer> lvls;
+    HashMap<Enchantment, Integer> enchants;
+    Category[] categories;
 
-    public Item(String name, Material type, RarityType rarity, List<String> lore, HashMap<Enchantment, Integer> enchants_) {
+    public Item(String name, Material type, RarityType rarity, List<String> lore, HashMap<Enchantment, Integer> enchants, Category[] categories) {
         this.name = name;
         this.type = type;
         this.rarity = rarity;
         this.lore = lore;
-        this.enchants_ = enchants_;
+        this.enchants = enchants;
+        this.categories = Helper.sortCategories(categories);
 
         buildItem();
     }
@@ -40,23 +43,17 @@ public class Item {
         getRarityColor();
 
         meta.setDisplayName(this.rarityColor + this.name);
-
-        // Add rarity
-        //this.lore.add("");
-        //this.lore.add(this.rarityColor + this.rarity);
-
-        //
         meta.setLore(this.lore);
 
-        // Add every enchant with the correct levels
+        // Wanna save this bc im proud of it - dont judge me
         /*for (int x = 0; x == this.enchants.size() - 1; x++) {
             if (this.lvls.size() >= x) {
                 meta.addEnchant(this.enchants.get(x), this.lvls.get(x), true);
             }
         }*/
 
-        for (Enchantment ench : this.enchants_.keySet()) {
-            meta.addEnchant(ench, this.enchants_.get(ench), true); // im just so cool and smart
+        for (Enchantment ench : this.enchants.keySet()) {
+            meta.addEnchant(ench, this.enchants.get(ench), true); // im just so cool and smart
         }
 
         item.setItemMeta(meta);
@@ -83,10 +80,5 @@ public class Item {
     }
 
     public ItemStack getItem() { return this.item; }
-    /*public String getName() { return this.name; }
-    public Material getType() { return this.type; }
-    public List<String> getLore() { return this.lore; }
-    public List<Enchantment> getEnchants() { return this.enchants; }
-    public List<Integer> getLvls() { return this.lvls; }
-    public String getRarity() { return this.rarity; }*/
+    public Category[] getCategories() { return this.categories; }
 }

@@ -1,9 +1,9 @@
 package Mingo.WeirdItems.Items;
 
-import Mingo.WeirdItems.Candy.Bag;
-import Mingo.WeirdItems.Item;
-import Mingo.WeirdItems.Main;
-import Mingo.WeirdItems.RarityType;
+import Mingo.WeirdItems.*;
+import Mingo.WeirdItems.Helpers.Candy.Bag;
+import Mingo.WeirdItems.Helpers.Category.Category;
+import Mingo.WeirdItems.Helpers.Other.RarityType;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -22,9 +22,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class CandyBag implements Listener {
+public class CandyBag extends WeirdItem implements Listener {
 
     ItemStack item;
+    Item item_;
+
     Bag bag;
 
     public CandyBag(Main plugin) {
@@ -35,12 +37,13 @@ public class CandyBag implements Listener {
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
         enchants.put(Enchantment.LURE, 1);
 
-        Item rock = new Item("Candy Bag", Material.RABBIT_STEW, RarityType.RARE, lore, enchants);
-        ItemMeta meta = rock.getItem().getItemMeta();
+        Item candyBag = new Item("Candy Bag", Material.RABBIT_STEW, RarityType.RARE, lore, enchants, new Category[]{Category.MAGICAL});
+        ItemMeta meta = candyBag.getItem().getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_DYE);
-        rock.getItem().setItemMeta(meta);
+        candyBag.getItem().setItemMeta(meta);
 
-        this.item = rock.getItem();
+        this.item = candyBag.getItem();
+        this.item_ = candyBag;
         this.bag = new Bag();
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -63,5 +66,5 @@ public class CandyBag implements Listener {
         }
     }
 
-    public ItemStack getItem() { return this.item; }
+    public Item getItem() { return this.item_; }
 }

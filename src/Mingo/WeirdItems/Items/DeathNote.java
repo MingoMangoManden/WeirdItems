@@ -1,9 +1,9 @@
 package Mingo.WeirdItems.Items;
 
-import Mingo.WeirdItems.DeathCauses.DeathCause;
-import Mingo.WeirdItems.Item;
-import Mingo.WeirdItems.Main;
-import Mingo.WeirdItems.RarityType;
+import Mingo.WeirdItems.*;
+import Mingo.WeirdItems.Helpers.Other.DeathCause;
+import Mingo.WeirdItems.Helpers.Category.Category;
+import Mingo.WeirdItems.Helpers.Other.RarityType;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -19,23 +19,32 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class DeathNote implements Listener {
+/**
+ * As of
+ * 13-12-2021,
+ * I declare this class is now the class I'm most proud of,
+ * and I'm even considering trying to isolate,
+ * and even sell it as plugin on its own.
+ *
+ * Thanks for coming to my TedTalk.
+ * - Mingo (considering the name Koda or こだ)
+ */
+public class DeathNote extends WeirdItem implements Listener {
 
     public static ItemStack item;
+    Item item_;
+
     Main plugin;
 
     //List<Player> dyingPlayers = new ArrayList<>();
     HashMap<Player, DeathCause> dyingPlayers = new HashMap<>();
     List<String> guideAndRules;
-
-    HashMap<Player, BukkitTask> playersGettingConsumed = new HashMap<>();
 
     public DeathNote(Main plugin) {
         List<String> lore = new ArrayList<>();
@@ -46,7 +55,7 @@ public class DeathNote implements Listener {
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
         enchants.put(Enchantment.LURE, 1);
 
-        Item book = new Item("Death Note", Material.WRITABLE_BOOK, RarityType.LEGENDARY, lore, enchants);
+        Item book = new Item("Death Note", Material.WRITABLE_BOOK, RarityType.LEGENDARY, lore, enchants, new Category[]{Category.MAGICAL, Category.WEAPON, Category.TOOL});
         BookMeta meta = (BookMeta) book.getItem().getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
         // RULES FOR USE
@@ -80,6 +89,7 @@ public class DeathNote implements Listener {
         book.getItem().setItemMeta(meta);
 
         this.item = book.getItem();
+        this.item_ = book;
         this.plugin = plugin;
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -214,23 +224,6 @@ public class DeathNote implements Listener {
                     dyingPlayers.remove(victim);
                     //strike.addPassenger
                     break;
-                case EATEN_BY_GROUND:
-                    this.dyingPlayers.put(victim, DeathCause.EATEN_BY_GROUND);
-                    BukkitTask task = sched.runTaskTimer(this.plugin, () -> {
-                        if (victim.isDead()) {
-                            sched.cancelTask(playersGettingConsumed.get(victim).getTaskId());
-                            playersGettingConsumed.remove(victim);
-                            dyingPlayers.remove(victim);
-                        }
-                        if (!victim.getLocation().subtract(0, 1, 0).getBlock().getType().equals(Material.BEDROCK)) {
-                            Location loc2 = victim.getLocation().add(0.0D, -0.0625000000001D, 0.0D);
-                            if (victim.getLocation() != loc2) {
-                                victim.teleport(loc2);
-                            }
-                        }
-                    }, 0L, 2L);
-                    playersGettingConsumed.put(victim, task);
-                    break;
                 case EXPLODE:
                     this.dyingPlayers.put(victim, DeathCause.EXPLODE);
                     victim.getWorld().createExplosion(victim.getLocation(), 1, false, false);
@@ -279,5 +272,5 @@ public class DeathNote implements Listener {
         victim.damage(victim.getHealth(), attacker);
     }
 
-    public ItemStack getItem() { return this.item; }
+    public Item getItem() { return this.item_; }
 }

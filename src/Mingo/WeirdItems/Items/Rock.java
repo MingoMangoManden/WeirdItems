@@ -1,8 +1,8 @@
 package Mingo.WeirdItems.Items;
 
-import Mingo.WeirdItems.Item;
-import Mingo.WeirdItems.Main;
-import Mingo.WeirdItems.RarityType;
+import Mingo.WeirdItems.*;
+import Mingo.WeirdItems.Helpers.Category.Category;
+import Mingo.WeirdItems.Helpers.Other.RarityType;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -23,9 +23,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-public class Rock implements Listener {
+public class Rock extends WeirdItem implements Listener {
 
     ItemStack item;
+    Item item_;
 
     public Rock(Main plugin) {
         List<String> lore = new ArrayList<>();
@@ -35,12 +36,13 @@ public class Rock implements Listener {
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
         enchants.put(Enchantment.LURE, 1);
 
-        Item rock = new Item("Rock", Material.FLINT, RarityType.LEGENDARY, lore, enchants);
+        Item rock = new Item("Rock", Material.FLINT, RarityType.LEGENDARY, lore, enchants, new Category[]{Category.TOOL});
         ItemMeta meta = rock.getItem().getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_DYE);
         rock.getItem().setItemMeta(meta);
 
         this.item = rock.getItem();
+        this.item_ = rock;
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
@@ -70,5 +72,5 @@ public class Rock implements Listener {
         }
     }
 
-    public ItemStack getItem() { return this.item; }
+    public Item getItem() { return this.item_; }
 }

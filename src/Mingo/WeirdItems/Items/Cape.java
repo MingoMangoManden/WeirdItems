@@ -1,8 +1,8 @@
 package Mingo.WeirdItems.Items;
 
-import Mingo.WeirdItems.Item;
-import Mingo.WeirdItems.Main;
-import Mingo.WeirdItems.RarityType;
+import Mingo.WeirdItems.*;
+import Mingo.WeirdItems.Helpers.Category.Category;
+import Mingo.WeirdItems.Helpers.Other.RarityType;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -20,12 +20,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Cape implements Listener {
+public class Cape extends WeirdItem implements Listener {
 
     ItemStack item;
+    Item item_;
+
     Main plugin;
 
-    int defaultCooldown = 3;
+    static final int defaultCooldown = 3;
     HashMap<Player, Integer> cooldown = new HashMap<>();
     HashMap<Player, BukkitTask> cooldownTasks = new HashMap<>();
 
@@ -38,13 +40,14 @@ public class Cape implements Listener {
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
         enchants.put(Enchantment.LURE, 1);
 
-        Item cape = new Item("Superman's cape", Material.LEATHER_CHESTPLATE, RarityType.EPIC, lore, enchants);
+        Item cape = new Item("Superman's cape", Material.LEATHER_CHESTPLATE, RarityType.EPIC, lore, enchants, new Category[]{Category.ARMOR, Category.MAGICAL, Category.MOVEMENT});
         LeatherArmorMeta meta = (LeatherArmorMeta) cape.getItem().getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_DYE);
         meta.setColor(Color.RED);
         cape.getItem().setItemMeta(meta);
 
         this.item = cape.getItem();
+        this.item_ = cape;
         this.plugin = plugin;
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -83,5 +86,5 @@ public class Cape implements Listener {
         this.cooldownTasks.put(p, task);
     }
 
-    public ItemStack getItem() { return this.item; }
+    public Item getItem() { return this.item_; }
 }

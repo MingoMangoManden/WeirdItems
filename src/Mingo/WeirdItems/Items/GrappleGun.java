@@ -1,29 +1,32 @@
 package Mingo.WeirdItems.Items;
 
+import Mingo.WeirdItems.*;
+import Mingo.WeirdItems.Helpers.Category.Category;
+import Mingo.WeirdItems.Helpers.Other.Helper;
+import Mingo.WeirdItems.Helpers.Other.RarityType;
 import Mingo.WeirdItems.Item;
-import Mingo.WeirdItems.Main;
-import Mingo.WeirdItems.RarityType;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class GrappleGun implements Listener {
+public class GrappleGun extends WeirdItem implements Listener {
 
     ItemStack item;
+    Item item_;
+
     Main plugin;
 
     public GrappleGun(Main plugin) {
@@ -33,12 +36,13 @@ public class GrappleGun implements Listener {
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
         enchants.put(Enchantment.LURE, 1);
 
-        Item sandals = new Item("Grapple Gun", Material.BOW, RarityType.RARE, lore, enchants);
-        ItemMeta meta = sandals.getItem().getItemMeta();
+        Item gun = new Item("Grapple Gun", Material.BOW, RarityType.RARE, lore, enchants, new Category[]{Category.MOVEMENT});
+        ItemMeta meta = gun.getItem().getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
-        sandals.getItem().setItemMeta(meta);
+        gun.getItem().setItemMeta(meta);
 
-        this.item = sandals.getItem();
+        this.item = gun.getItem();
+        this.item_ = gun;
         this.plugin = plugin;
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -46,19 +50,20 @@ public class GrappleGun implements Listener {
 
     @EventHandler
     public void onRightClick(EntityShootBowEvent e) {
-        ItemStack item = e.getBow();
+        ItemStack bow = e.getBow();
 
-        if (e.getEntity() instanceof Player p && item.equals(this.item)) {
-            LivingEntity bat = (LivingEntity) p.getWorld().spawn(p.getLocation(), Bat.class);
+        if (e.getEntity() instanceof Player && Helper.isItem(bow, this.item)) {
+            Player p = (Player) e.getEntity();
+            Location loc = p.getLocation();
+            Vector dir = loc.getDirection();
+
             Entity ar = e.getProjectile();
+            Location arLoc = ar.getLocation();
+            Vector arDir = arLoc.getDirection();
 
-            bat.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 9999999, 999999, true, false));
-            bat.setAI(false);
-            bat.setLeashHolder(ar);
-
-            ar.setVelocity(p.getLocation().getDirection().multiply(2));
+            p.setVelocity(dir.subtract(arDir));
         }
     }
 
-    public ItemStack getItem() { return this.item; }
+    public Item getItem() { return this.item_; }
 }

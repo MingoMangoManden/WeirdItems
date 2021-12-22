@@ -1,14 +1,11 @@
 package Mingo.WeirdItems.Items;
 
-import Mingo.WeirdItems.Item;
-import Mingo.WeirdItems.Main;
-import Mingo.WeirdItems.RarityType;
+import Mingo.WeirdItems.*;
+import Mingo.WeirdItems.Helpers.Category.Category;
+import Mingo.WeirdItems.Helpers.Other.RarityType;
 import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.Hash;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -18,8 +15,6 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -27,9 +22,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class NinjaCap implements Listener {
+public class NinjaCap extends WeirdItem implements Listener {
 
     ItemStack item;
+    Item item_;
+
     Main plugin;
 
     int defaultCooldown = 10;
@@ -45,13 +42,14 @@ public class NinjaCap implements Listener {
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
         enchants.put(Enchantment.LURE, 1);
 
-        Item cap = new Item("Ninja Cap", Material.LEATHER_HELMET, RarityType.UNCOMMON, lore, enchants);
+        Item cap = new Item("Ninja Cap", Material.LEATHER_HELMET, RarityType.UNCOMMON, lore, enchants, new Category[]{Category.MAGICAL, Category.ARMOR, Category.MOVEMENT});
         LeatherArmorMeta meta = (LeatherArmorMeta) cap.getItem().getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_DYE);
         meta.setColor(Color.BLACK);
         cap.getItem().setItemMeta(meta);
 
         this.item = cap.getItem();
+        this.item_ = cap;
         this.plugin = plugin;
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -122,5 +120,5 @@ public class NinjaCap implements Listener {
         this.cooldownTasks.put(p, task);
     }
 
-    public ItemStack getItem() { return this.item; }
+    public Item getItem() { return this.item_; }
 }

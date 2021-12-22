@@ -1,8 +1,8 @@
 package Mingo.WeirdItems.Items;
 
-import Mingo.WeirdItems.Item;
-import Mingo.WeirdItems.Main;
-import Mingo.WeirdItems.RarityType;
+import Mingo.WeirdItems.*;
+import Mingo.WeirdItems.Helpers.Category.Category;
+import Mingo.WeirdItems.Helpers.Other.RarityType;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -23,9 +23,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Shroom implements Listener {
+public class Shroom extends WeirdItem implements Listener {
 
     ItemStack item;
+    Item item_;
+
     Main plugin;
 
     public Shroom(Main plugin) {
@@ -35,12 +37,13 @@ public class Shroom implements Listener {
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
         enchants.put(Enchantment.LURE, 1);
 
-        Item sandals = new Item("Berserker Shroom", Material.WARPED_FUNGUS, RarityType.RARE, lore, enchants);
-        ItemMeta meta = sandals.getItem().getItemMeta();
+        Item shroom = new Item("Berserker Shroom", Material.WARPED_FUNGUS, RarityType.RARE, lore, enchants, new Category[]{Category.MAGICAL, Category.WEAPON, Category.TOOL});
+        ItemMeta meta = shroom.getItem().getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
-        sandals.getItem().setItemMeta(meta);
+        shroom.getItem().setItemMeta(meta);
 
-        this.item = sandals.getItem();
+        this.item = shroom.getItem();
+        this.item_ = shroom;
         this.plugin = plugin;
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -90,5 +93,5 @@ public class Shroom implements Listener {
         }
     }
 
-    public ItemStack getItem() { return this.item; }
+    public Item getItem() { return this.item_; }
 }

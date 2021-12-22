@@ -1,8 +1,8 @@
 package Mingo.WeirdItems.Items;
 
-import Mingo.WeirdItems.Item;
-import Mingo.WeirdItems.Main;
-import Mingo.WeirdItems.RarityType;
+import Mingo.WeirdItems.*;
+import Mingo.WeirdItems.Helpers.Category.Category;
+import Mingo.WeirdItems.Helpers.Other.RarityType;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,9 +26,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class EnderButt implements Listener {
+public class EnderButt extends WeirdItem implements Listener {
 
     ItemStack item;
+    Item item_;
+
     List<Player> flyingPlayers = new ArrayList<>();
     HashMap<Player, EnderPearl> butts = new HashMap<>();
 
@@ -40,12 +42,13 @@ public class EnderButt implements Listener {
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
         enchants.put(Enchantment.LURE, 1);
 
-        Item butt = new Item("Ender Butt", Material.ENDER_PEARL, RarityType.EPIC, lore, enchants);
+        Item butt = new Item("Ender Butt", Material.ENDER_PEARL, RarityType.EPIC, lore, enchants, new Category[]{Category.MOVEMENT, Category.TOOL, Category.MAGICAL});
         ItemMeta meta = butt.getItem().getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
         butt.getItem().setItemMeta(meta);
 
         this.item = butt.getItem();
+        this.item_ = butt;
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
@@ -135,5 +138,5 @@ public class EnderButt implements Listener {
         return flyingPlayers.contains(p);
     }
 
-    public ItemStack getItem() { return this.item; }
+    public Item getItem() { return this.item_; }
 }

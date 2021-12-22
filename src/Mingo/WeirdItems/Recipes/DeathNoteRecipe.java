@@ -11,11 +11,9 @@ public class DeathNoteRecipe {
 
     public DeathNoteRecipe(Main plugin) {
         NamespacedKey key = new NamespacedKey(plugin, "deathnote");
-
         ShapedRecipe recipe = new ShapedRecipe(key, DeathNote.item);
 
         recipe.shape("NNN", "NBN", "NNN");
-
         recipe.setIngredient('N', Material.NETHERITE_BLOCK);
         recipe.setIngredient('B', Material.BOOK);
 

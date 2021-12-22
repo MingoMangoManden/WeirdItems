@@ -1,8 +1,9 @@
 package Mingo.WeirdItems.Items;
 
-import Mingo.WeirdItems.Item;
-import Mingo.WeirdItems.Main;
-import Mingo.WeirdItems.RarityType;
+import Mingo.WeirdItems.*;
+import Mingo.WeirdItems.Helpers.Category.Category;
+import Mingo.WeirdItems.Helpers.Other.Helper;
+import Mingo.WeirdItems.Helpers.Other.RarityType;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -16,10 +17,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class GrapplingHook implements Listener {
+public class GrapplingHook extends WeirdItem implements Listener {
 
     ItemStack item;
-    boolean ready = false;
+    Item item_;
+
+    boolean ready = false; // note: make this multiplayer friendly
 
     public GrapplingHook(Main plugin) {
         List<String> lore = new ArrayList<>();
@@ -28,11 +31,12 @@ public class GrapplingHook implements Listener {
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
         enchants.put(Enchantment.KNOCKBACK, 2);
 
-        Item grap = new Item("Grappling Hook", Material.FISHING_ROD, RarityType.LEGENDARY, lore, enchants);
+        Item grap = new Item("Grappling Hook", Material.FISHING_ROD, RarityType.LEGENDARY, lore, enchants, new Category[]{Category.TOOL, Category.MOVEMENT});
 
         //p.getInventory().addItem(grap.getItem());
 
         this.item = grap.getItem();
+        this.item_ = grap;
 
         // Register events
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -43,7 +47,7 @@ public class GrapplingHook implements Listener {
         Player p = e.getPlayer();
         ItemStack heldItem = p.getInventory().getItemInMainHand();
 
-        if (heldItem.equals(this.item) && this.ready) {
+        if (Helper.isItem(heldItem, this.item) && this.ready) {
             //https://www.spigotmc.org/wiki/vector-programming-for-beginners/
             //p.setVelocity(p.getLocation().getDirection().multiply(3));
             Vector aim = e.getHook().getLocation().toVector().subtract(p.getLocation().toVector()).clone();
@@ -54,5 +58,5 @@ public class GrapplingHook implements Listener {
         }
     }
 
-    public ItemStack getItem() { return this.item; }
+    public Item getItem() { return this.item_; }
 }

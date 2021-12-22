@@ -1,13 +1,11 @@
 package Mingo.WeirdItems.Items;
 
-import Mingo.WeirdItems.Item;
-import Mingo.WeirdItems.Main;
-import Mingo.WeirdItems.RarityType;
+import Mingo.WeirdItems.*;
+import Mingo.WeirdItems.Helpers.Category.Category;
+import Mingo.WeirdItems.Helpers.Other.RarityType;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,9 +19,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Sandals implements Listener {
+public class Sandals extends WeirdItem implements Listener {
 
     ItemStack item;
+    Item item_;
+
     Main plugin;
 
     public Sandals(Main plugin) {
@@ -35,12 +35,13 @@ public class Sandals implements Listener {
         HashMap<Enchantment, Integer> enchants = new HashMap<>();
         enchants.put(Enchantment.LURE, 1);
 
-        Item sandals = new Item("Hermes' Sandals", Material.GOLDEN_BOOTS, RarityType.RARE, lore, enchants);
+        Item sandals = new Item("Hermes' Sandals", Material.GOLDEN_BOOTS, RarityType.RARE, lore, enchants, new Category[]{Category.MOVEMENT, Category.MAGICAL});
         ItemMeta meta = sandals.getItem().getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
         sandals.getItem().setItemMeta(meta);
 
         this.item = sandals.getItem();
+        this.item_ = sandals;
         this.plugin = plugin;
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -71,5 +72,5 @@ public class Sandals implements Listener {
         }
     }
 
-    public ItemStack getItem() { return this.item; }
+    public Item getItem() { return this.item_; }
 }
